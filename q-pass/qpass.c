@@ -65,20 +65,12 @@ void dfs(Stack *path_stack, uint32_t curr_node, Queue **head) {
   while (j < (MATRIX_MAX)) {
     if (matrix[curr_node][j] == 1 && check_array[j] == 0) {
       check_array[j] = 1;
-      //printf("NODE: %d J: %d\n", curr_node, j);
-      //printf("SIZE: %d\n", stack_size(path_stack));
       if(stack_size(path_stack) != 1 || curr_node != 0) {
         stack_push(path_stack, curr_node);
-        //printf("AFTER PUSH:\n");
-        //stack_print(path_stack);
-        //printf("~~~~~~~\n");
       }
       dfs(path_stack, j, head); // recursion
       stack_pop(path_stack);
-      //printf("AFTER POP:\n");
-      //stack_print(path_stack);
-      //printf("_______\n");
-    }
+     }
     j++;
   }
   return;
@@ -177,12 +169,18 @@ int main(int argc, char **argv) {
   dfs(path_stack, 0, &head);
   printf("Final Possible Paths:\n");
   q_print(&head);
-  //printf("count: %d\n", q_count(&head));
-  q_reserve(&head, path_count);
+
+  Queue *partial = NULL;
+  partial = q_reserve(&partial, &head, path_count);
   
   printf("\nRESERVED PATH(S):\n");
   q_print(&head);
-  q_free(&head);
+
+  printf("\nPARTIAL PATH(S):\n");
+  q_print(&partial);
+
+  q_free(&head);  
+  q_free(&partial);
   stack_delete(path_stack);
 
   printf("Number of paths found: %d \n", path_count);

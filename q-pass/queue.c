@@ -52,7 +52,6 @@ Queue *q_add(Queue **head, Stack *s) {
      // when adding new element to middle of queue
      uint32_t index_count = 0;
      Queue *front = (*head)->next;
-     //front = (*head)->next;
      while(front != NULL) {
       if (stack_size(s) + 1 <= front->path_len || front->next == NULL) {
       	for (uint32_t i = 0; i < index_count; i++) {
@@ -82,6 +81,50 @@ Queue *q_add(Queue **head, Stack *s) {
     *head = q_create(s);
   }
   return *head;
+}
+
+Queue *q_add_new(Queue **new, Queue **head, uint32_t rounds) {
+  // queues unreservable paths
+	static uint32_t counter = 0;
+
+  Queue *parse = *head;
+
+  for (uint32_t i = 0; i < rounds - counter; i++) {
+  	parse = parse->next;
+  }
+
+  Queue data = *parse;
+
+  Queue *temp = *new;
+ 
+  Queue *add = (Queue *)malloc(sizeof(Queue));
+  *add = data;
+  add->next = NULL;
+  add->stack = (uint32_t *)malloc(MINIMUM * sizeof(uint32_t));
+  add->stack[0] = 0;
+  uint32_t i = 1;
+
+  while (i < parse->path_len + 1) {
+  	add->stack[i] = parse->stack[i];
+  	i++;
+  }
+  add->path_len = parse->path_len;
+
+  if (*new != NULL) {
+  	while((*new)->next != NULL) {
+  		new = &(*new)->next;
+  	}
+  	(*new)->next = add;
+  } else {
+  	*new = add;
+  }
+  if (temp == NULL) {
+  	temp = *new;
+  }
+  *new = temp;
+
+  counter++;
+  return *new;
 }
 
 void q_delete(Queue *head) {
@@ -167,10 +210,11 @@ void q_node_delete(Queue **head, uint32_t rounds, uint32_t num_paths) {
 		head = &val; // resets the value of head to start of queue
 		counter++;
 	}
+
 	return;
 }
 
-void q_reserve(Queue **q, uint32_t num_paths) {
+Queue *q_reserve(Queue **partial, Queue **q, uint32_t num_paths) {
 	// parse through queue and reserve paths with least hops
 	uint32_t rounds = 0;
 	uint32_t channel[26];
@@ -180,9 +224,6 @@ void q_reserve(Queue **q, uint32_t num_paths) {
 		channel[fill] = 0;
 	}
 	while (rounds < num_paths && not_null != false) {
-		if (tester == NULL) {
-			not_null = false;
-		}
 		bool cont = true;
 		uint32_t i = 1;
 		uint32_t temp;
@@ -194,8 +235,13 @@ void q_reserve(Queue **q, uint32_t num_paths) {
 					channel[temp]++;
 					i++;
 			  } else {
+
+			  	*partial = q_add_new(partial, q, rounds);
 					q_node_delete(q, rounds, num_paths);
 					cont = false; // stop parsing through
+					if (tester == NULL) {
+						not_null = false;
+					}
 			  }
 			} else {
 				channel[temp]++;
@@ -204,8 +250,11 @@ void q_reserve(Queue **q, uint32_t num_paths) {
 		}
 		rounds++;
 		tester = tester->next;
+		if (tester == NULL) {
+			not_null = false;
+		}
 	}
-	return;
+	return *partial;
 }
 
 uint32_t q_count(Queue **q) {
@@ -216,7 +265,6 @@ uint32_t q_count(Queue **q) {
 	}
 	return count;
 }
-
 
 
 

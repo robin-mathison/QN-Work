@@ -16,6 +16,8 @@ Queue *q_create(Stack *stack);
 Queue *q_add(Queue **q, Stack *stack);
 // adds a path to the queue
 
+Queue *q_add_new(Queue **new, Queue **head, uint32_t rounds);
+
 void q_delete(Queue *q);
 // deletes a path from the queue
 
@@ -24,7 +26,7 @@ void q_free(Queue **q);
 
 void q_print (Queue **q);
 
-void q_reserve(Queue **q, uint32_t num_paths);
+Queue *q_reserve(Queue **partial, Queue **q, uint32_t num_paths);
 
 uint32_t q_count(Queue **q);
 
