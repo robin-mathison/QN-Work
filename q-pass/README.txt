@@ -7,7 +7,22 @@ To run:
 e.g.: "./qpass -d -m" will run the executable as a directed Matrix with a printed output.
 
 After execution, different paths can be made by entering pairs that simulate node to node
-connections where "z" is the destination.
+connections where "a" is the start and "z" is the destination.
+Pairs should progress further into indices of the alphabet. See below:
+Acceptable format: (in the form value (index))
+a(0)b(1)
+b(1)c(2)
+c(2)z(25)
+**This will result in a->b->c->z
+
+Unacceptable format:
+a(0)y(24)
+y(24)e(4) **this line is incorrect
+y(24)z(25)
+**This will result in a->y->z
+
+Thus, it is acceptable to skip letters, so long as the first index is lesser than the second.
+
 Each pair should be followed by the "enter" key.
 End of paths can be designated with the "control + d" keys.
 e.g.:

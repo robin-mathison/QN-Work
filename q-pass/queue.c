@@ -235,7 +235,6 @@ Queue *q_reserve(Queue **partial, Queue **q, uint32_t num_paths) {
 					channel[temp]++;
 					i++;
 			  } else {
-
 			  	*partial = q_add_new(partial, q, rounds);
 					q_node_delete(q, rounds, num_paths);
 					cont = false; // stop parsing through
