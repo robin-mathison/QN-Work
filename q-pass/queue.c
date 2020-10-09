@@ -92,37 +92,35 @@ Queue *q_add_new(Queue **new, Queue **head, uint32_t rounds) {
   for (uint32_t i = 0; i < rounds - counter; i++) {
   	parse = parse->next;
   }
-
   Queue data = *parse;
-
   Queue *temp = *new;
- 
   Queue *add = (Queue *)malloc(sizeof(Queue));
   *add = data;
   add->next = NULL;
   add->stack = (uint32_t *)malloc(MINIMUM * sizeof(uint32_t));
   add->stack[0] = 0;
   uint32_t i = 1;
-
   while (i < parse->path_len + 1) {
   	add->stack[i] = parse->stack[i];
   	i++;
   }
-  add->path_len = parse->path_len;
-
+  add->path_len = parse->path_len; 
+  q_print(new);
   if (*new != NULL) {
   	while((*new)->next != NULL) {
   		new = &(*new)->next;
   	}
+  	q_print(&add);
   	(*new)->next = add;
+  	q_print(new);
   } else {
   	*new = add;
   }
   if (temp == NULL) {
   	temp = *new;
   }
-  *new = temp;
-
+  q_print(&temp);
+  new = &temp;
   counter++;
   return *new;
 }
