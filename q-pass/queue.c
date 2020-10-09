@@ -105,21 +105,17 @@ Queue *q_add_new(Queue **new, Queue **head, uint32_t rounds) {
   	i++;
   }
   add->path_len = parse->path_len; 
-  q_print(new);
   if (*new != NULL) {
   	while((*new)->next != NULL) {
   		new = &(*new)->next;
   	}
-  	q_print(&add);
   	(*new)->next = add;
-  	q_print(new);
   } else {
   	*new = add;
   }
   if (temp == NULL) {
   	temp = *new;
   }
-  q_print(&temp);
   new = &temp;
   counter++;
   return *new;
