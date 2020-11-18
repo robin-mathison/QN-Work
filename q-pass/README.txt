@@ -1,9 +1,16 @@
+The executable, Q-PASS, simulates the quantum routing protocol described in 4.2 of 
+'Modeling and Designing Routing Protocols in Quantum Networks' 
+(https://arxiv.org/pdf/1909.09329.pdf). This implementation is in C. 
+
+The program works by inputting s-d pairs that are recursively pushed onto a stack to find paths. 
+These paths are then placed into a priority queue and ordered least to most hops. 
+
 To run:
 "make" will make all needed *.o and *.h files.
 "./qpass -*" will execute the "qpass" executable.
 "-u" is undirected (meaning paths are two way)
 "-d" is directed (meaning paths are one way) ** this is recommended
-"-m" will print the matrix diagram
+"-m" will print the matrix diagram for visualization
 e.g.: "./qpass -d -m" will run the executable as a directed Matrix with a printed output.
 
 After execution, different paths can be made by entering pairs that simulate node to node
@@ -25,7 +32,7 @@ Thus, it is acceptable to skip letters, so long as the first index is lesser tha
 
 Each pair should be followed by the "enter" key.
 End of paths can be designated with the "control + d" keys.
-e.g.:
+input example:
 ab
 bc
 cd
